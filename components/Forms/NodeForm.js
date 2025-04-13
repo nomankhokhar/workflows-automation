@@ -4,7 +4,7 @@ import { insertAfter } from "@/utils/insertion";
 import React, { useContext, useState } from "react";
 import { DataContext } from "../useContext/contextApi";
 
-const NodeForm = ({ id, appendChild, start }) => {
+const NodeForm = ({ id, start, setIsSheetOpen }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedEvent, setSelectedEvent] = useState("");
   const [formData, setFormData] = useState({});
@@ -192,6 +192,7 @@ const NodeForm = ({ id, appendChild, start }) => {
         activities: updatedData,
       };
     });
+    setIsSheetOpen(false);
   };
 
   return (

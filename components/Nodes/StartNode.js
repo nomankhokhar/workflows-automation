@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import {
   Sheet,
@@ -11,22 +11,28 @@ import {
 import NodeForm from "../Forms/NodeForm";
 
 const StartNode = ({ id }) => {
+  const [isSheetOpen, setIsSheetOpen] = useState(true);
+
   return (
     <div className="flex justify-center">
-      <Sheet>
+      <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetTrigger>
           <Button
-            variant="outline"
-            className="w-[100px] h-[40px] cursor-pointer p-3 border-2 border-dashed border-gray-300 rounded-md"
+            variant="gradient"
+            className="w-[120px] h-[45px] flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold rounded-md shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg cursor-pointer"
           >
-            Add Activity +
+            Add Activity
           </Button>
         </SheetTrigger>
         <SheetContent>
           <SheetHeader>
             <SheetDescription>
               <div className="overflow-y-scroll h-screen">
-                <NodeForm id={id} start={"start"} />
+                <NodeForm
+                  id={id}
+                  start={"start"}
+                  setIsSheetOpen={setIsSheetOpen}
+                />
               </div>
             </SheetDescription>
           </SheetHeader>

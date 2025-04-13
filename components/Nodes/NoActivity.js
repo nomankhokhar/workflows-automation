@@ -11,6 +11,7 @@ import { Button } from "../ui/button";
 import NodeForm from "../Forms/NodeForm";
 
 const NoActivity = ({ id }) => {
+  const [isSheetOpen, setIsSheetOpen] = React.useState(false);
   return (
     <div>
       <Sheet>
@@ -21,7 +22,11 @@ const NoActivity = ({ id }) => {
           <SheetHeader>
             <SheetDescription>
               <div className="overflow-y-scroll h-screen">
-                <NodeForm id={id} start={"noActivity"} />
+                <NodeForm
+                  id={id}
+                  start={"noActivity"}
+                  setIsSheetOpen={setIsSheetOpen}
+                />
               </div>
             </SheetDescription>
           </SheetHeader>

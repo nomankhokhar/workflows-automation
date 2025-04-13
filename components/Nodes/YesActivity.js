@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Handle, Position } from "reactflow";
 import {
   Sheet,
@@ -9,10 +9,13 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "../ui/button";
 import NodeForm from "../Forms/NodeForm";
+
 const YesActivity = ({ id }) => {
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
   return (
     <div>
-      <Sheet>
+      <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetTrigger>
           <Button variant="outline">Yes Activity</Button>
         </SheetTrigger>
@@ -20,7 +23,11 @@ const YesActivity = ({ id }) => {
           <SheetHeader>
             <SheetDescription>
               <div className="overflow-y-scroll h-screen">
-                <NodeForm id={id} start={"yesActivity"} />
+                <NodeForm
+                  id={id}
+                  start={"yesActivity"}
+                  setIsSheetOpen={setIsSheetOpen}
+                />
               </div>
             </SheetDescription>
           </SheetHeader>

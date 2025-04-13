@@ -13,6 +13,7 @@ import {
 
 import { Button } from "../ui/button";
 const CustomNode = ({ id, data }) => {
+  const [isSheetOpen, setIsSheetOpen] = React.useState(false);
   const { setNodes, setEdges } = useReactFlow();
 
   const handleDeleteNode = (nodeId) => {
@@ -108,7 +109,11 @@ const CustomNode = ({ id, data }) => {
           <SheetHeader>
             <SheetDescription>
               <div className="overflow-y-scroll h-screen">
-                <NodeForm id={id} appendChild={true} />
+                <NodeForm
+                  id={id}
+                  appendChild={true}
+                  setIsSheetOpen={setIsSheetOpen}
+                />
               </div>
             </SheetDescription>
           </SheetHeader>
