@@ -34,7 +34,6 @@ const YesActivity = ({ id }) => {
         </SheetContent>
       </Sheet>
       <Handle type="target" position={Position.Top} />
-      <Handle type="source" position={Position.Bottom} />
     </div>
   );
 };

@@ -83,6 +83,7 @@ const StartingWorkFlowForm = () => {
     };
 
     setData(formOutput);
+    sessionStorage.setItem("uniqueIdCounter", "2");
     router.push("/workflow");
     setFormData({
       name: "",

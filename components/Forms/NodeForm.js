@@ -100,7 +100,7 @@ const NodeForm = ({ id, start, setIsSheetOpen }) => {
       case "TransformationEvent":
         return {
           id: generateUniqueId(),
-          name: "Transforming the data into certain",
+          name: "TransformationEvent",
           app: "Slack",
           event: event.name,
           input: {},
@@ -135,12 +135,12 @@ const NodeForm = ({ id, start, setIsSheetOpen }) => {
               },
             ],
           },
-          name: "Checking nodepool status",
+          name: "IfConditionEvent",
         };
       case "TemporarySaveEvent":
         return {
           id: generateUniqueId(),
-          name: "Getting nodepool {{input.nodePoolName}} detail",
+          name: "TemporarySaveEvent",
           app: "Slack",
           event: event.name,
           input: {},
@@ -167,7 +167,7 @@ const NodeForm = ({ id, start, setIsSheetOpen }) => {
       default:
         return {
           id: generateUniqueId(),
-          name: "Getting nodepool list",
+          name: "App Activity",
           app: "Slack",
           event: event.name,
           input: {

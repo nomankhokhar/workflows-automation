@@ -99,7 +99,7 @@ const CustomNode = ({ id, data }) => {
       </div>
 
       {/* Add child node button */}
-      <Sheet>
+      <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetTrigger>
           <Button className="absolute bottom-2 left-2 p-1 bg-green-600 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center hover:bg-green-700 cursor-pointer">
             +
