@@ -1,0 +1,217 @@
+{
+  "uuid": "6087f76c-8dbf-41ed-98da-8cff853f8e29",
+  "workflowId": "sample-flow-control-workflow-ce1cac74-09a8-41f2-aab4-3208aa37af7f",
+  "runnerId": "daa5048f-06d9-4ea7-aff8-6ef06ebdd759",
+  "name": "sample-flow-control-workflow",
+  "projectName": "testing",
+  "description": "testing-email reminder package",
+  "status": "Running",
+  "categories": ["Kubernetics"],
+  "retry": 3,
+  "version": "1",
+  "inputes": [
+    { "name": "clusterName", "value": "cl6", "type": "text" },
+    { "name": "nodePoolName", "value": "userpool", "type": "text" },
+    { "name": "cloudServiceProvider", "value": "azure", "type": "text" },
+    { "name": "secretRef", "value": "azure-secret-final", "type": "text" }
+  ],
+  "activities": [
+    {
+      "id": "A1",
+      "name": "Getting nodepool list",
+      "app": "Cluster",
+      "event": "AllClustersEvent",
+      "input": {
+        "cloudServiceProvider": "{{input.cloudServiceProvider}}",
+        "clusterName": "{{input.clusterName}}",
+        "nodePoolName": "{{input.nodePoolName}}",
+        "secretRef": "{{input.secretRef}}",
+        "workflowId": "sample-flow-control-workflow-ce1cac74-09a8-41f2-aab4-3208aa37af7f"
+      }
+    },
+    {
+      "id": "A15",
+      "name": "Getting nodepool list",
+      "app": "Cluster",
+      "event": "AllClustersEvent",
+      "input": {
+        "cloudServiceProvider": "{{input.cloudServiceProvider}}",
+        "clusterName": "{{input.clusterName}}",
+        "nodePoolName": "{{input.nodePoolName}}",
+        "secretRef": "{{input.secretRef}}",
+        "workflowId": "sample-flow-control-workflow-ce1cac74-09a8-41f2-aab4-3208aa37af7f"
+      }
+    },
+    {
+      "id": "A2",
+      "name": "Loop",
+      "app": "CoreEvents",
+      "event": "LoopEvent",
+      "input": {
+        "items": "{{activity.A1.output}}",
+        "activities": [
+          {
+            "app": "CoreEvents",
+            "event": "FlowControlEvent",
+            "id": "A3",
+            "name": "Control",
+            "input": {
+              "conditions": [
+                {
+                  "chainOperator": "",
+                  "conditionalOperator": "=",
+                  "id": "1",
+                  "leftValue": "{{activity.A2.item.properties.powerState.code}}",
+                  "rightValue": "Stopped"
+                }
+              ],
+              "yesActivity": [
+                {
+                  "app": "CoreEvents",
+                  "event": "TemporarySaveEvent",
+                  "id": "A5",
+                  "input": {
+                    "source": "{{activity.A2.item}}"
+                  },
+                  "name": "Yes"
+                }
+              ],
+              "noActivity": [
+                {
+                  "id": "A11",
+                  "name": "Loop",
+                  "app": "CoreEvents",
+                  "event": "LoopEvent",
+                  "input": {
+                    "activities": [
+                      {
+                        "app": "CoreEvents",
+                        "event": "FlowControlEvent",
+                        "id": "A12",
+                        "input": {
+                          "conditions": [
+                            {
+                              "chainOperator": "",
+                              "conditionalOperator": "=",
+                              "id": "1",
+                              "leftValue": "{{activity.A2.item.properties.powerState.code}}",
+                              "rightValue": "Stopped"
+                            }
+                          ],
+                          "yesActivity": [
+                            {
+                              "app": "CoreEvents",
+                              "event": "TemporarySaveEvent",
+                              "id": "A13",
+                              "input": {
+                                "source": "{{activity.A2.item}}"
+                              },
+                              "name": "Saving nodepools"
+                            }
+                          ],
+                          "noActivity": [
+                            {
+                              "app": "CoreEvents",
+                              "event": "TemporarySaveEvent",
+                              "id": "A14",
+                              "input": {
+                                "source": "{{activity.A11.item}}"
+                              },
+                              "name": "Saving nodepools"
+                            }
+                          ]
+                        },
+                        "name": "Checking nodepool status"
+                      }
+                    ],
+                    "items": "{{activity.A1.output}}",
+                    "workflowId": "sample-flow-control-workflow-ce1cac74-09a8-41f2-aab4-3208aa37af7f"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "workflowId": "sample-flow-control-workflow-ce1cac74-09a8-41f2-aab4-3208aa37af7f"
+      }
+    },
+    {
+      "id": "A4",
+      "name": "Cluster email-1",
+      "app": "Email",
+      "event": "NewEmailEvent",
+      "input": {
+        "formatType": "Yaml",
+        "message": "{{activity.A5.output}}",
+        "subject": "NodePool Report",
+        "toEmail": "goku.hulk234@gmail.com",
+        "workflowId": "sample-flow-control-workflow-ce1cac74-09a8-41f2-aab4-3208aa37af7f"
+      }
+    },
+    {
+      "id": "A6",
+      "name": "Cluster email-2",
+      "app": "Email",
+      "event": "NewEmailEvent",
+      "input": {
+        "formatType": "Yaml",
+        "message": "{{activity.A5.output}}",
+        "subject": "NodePool Report",
+        "toEmail": "goku.hulk234@gmail.com",
+        "workflowId": "sample-flow-control-workflow-ce1cac74-09a8-41f2-aab4-3208aa37af7f"
+      }
+    },
+    {
+      "id": "A7",
+      "name": "Cluster email-3",
+      "app": "Email",
+      "event": "NewEmailEvent",
+      "input": {
+        "formatType": "Yaml",
+        "message": "{{activity.A5.output}}",
+        "subject": "NodePool Report",
+        "toEmail": "goku.hulk234@gmail.com",
+        "workflowId": "sample-flow-control-workflow-ce1cac74-09a8-41f2-aab4-3208aa37af7f"
+      }
+    },
+    {
+      "id": "A8",
+      "name": "Cluster email-4",
+      "app": "Email",
+      "event": "NewEmailEvent",
+      "input": {
+        "formatType": "Yaml",
+        "message": "{{activity.A5.output}}",
+        "subject": "NodePool Report",
+        "toEmail": "goku.hulk234@gmail.com",
+        "workflowId": "sample-flow-control-workflow-ce1cac74-09a8-41f2-aab4-3208aa37af7f"
+      }
+    },
+    {
+      "id": "A9",
+      "name": "Cluster email-5",
+      "app": "Email",
+      "event": "NewEmailEvent",
+      "input": {
+        "formatType": "Yaml",
+        "message": "{{activity.A5.output}}",
+        "subject": "NodePool Report",
+        "toEmail": "goku.hulk234@gmail.com",
+        "workflowId": "sample-flow-control-workflow-ce1cac74-09a8-41f2-aab4-3208aa37af7f"
+      }
+    },
+    {
+      "id": "A10",
+      "name": "Cluster email-6",
+      "app": "Email",
+      "event": "NewEmailEvent",
+      "input": {
+        "formatType": "Yaml",
+        "message": "{{activity.A5.output}}",
+        "subject": "NodePool Report",
+        "toEmail": "goku.hulk234@gmail.com",
+        "workflowId": "sample-flow-control-workflow-ce1cac74-09a8-41f2-aab4-3208aa37af7f"
+      }
+    }
+  ]
+}

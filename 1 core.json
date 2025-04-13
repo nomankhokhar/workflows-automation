@@ -1,0 +1,216 @@
+1 core
+    LoopEvent
+    IfEvent(FlowControl)
+    TemperarySaeEvent
+    ParallelPathEvent
+
+2. cloudManagedKubertics
+    Shutdown
+    Start
+    NodePool Scale Up
+    NodePool Scale Down
+    All Cluster List
+    NodePool List
+    Cluster List
+3. azureCostManagement
+    PriceCalculateEvent
+
+4. amazonCostManagement
+    PriceCalculateEvent
+
+5. googleCostManagement
+    PriceCalculateEvent
+
+6. slack
+    SlackMessageEvent
+    SlackInteractionEvent
+
+7. gmail
+    NewEmailEvent
+
+{
+    "name": "core",
+    "events": [
+        {
+            "name": "LoopEvent",
+            "formFields": [
+                {
+                    "order": 1,
+                    "name": "items",
+                    "type": "text",
+                    "placeholder": "Enter items",
+                    "dependOn": 1,
+                    "validation": {
+                        "required": true
+                    }
+                }
+            ]
+        },
+        {
+            "name": "IfConditionEvent",
+            "formFields": [
+                {
+                    "order": 1,
+                    "name": "leftValue",
+                    "type": "text",
+                    "placeholder": "Enter left value",
+                    "dependOn": 0,
+                    "validation": {
+                        "required": true
+                    }
+                },
+                {
+                    "order": 2,
+                    "name": "rightValue",
+                    "type": "text",
+                    "placeholder": "Enter right value",
+                    "dependOn": 0,
+                    "validation": {
+                        "required": true
+                    }
+                },
+                {
+                    "order": 3,
+                    "name": "conditionalOperator",
+                    "type": "text",
+                    "placeholder": "Enter condition",
+                    "dependOn": 0,
+                    "validation": {
+                        "required": true
+                    }
+                },
+                {
+                    "order": 4,
+                    "name": "chainOperator",
+                    "type": "text",
+                    "placeholder": "Enter chain",
+                    "dependOn": 0,
+                    "validation": {
+                        "required": false
+                    }
+                }
+            ]
+        },
+        {
+            "name": "TemporarySaveEvent",
+            "formFields": [
+                {
+                    "order": 1,
+                    "name": "source",
+                    "type": "text",
+                    "placeholder": "Enter source",
+                    "dependOn": 0,
+                    "validation": {
+                        "required": true
+                    }
+                }
+            ]
+        },
+        {
+            "name": "TransformationEvent",
+            "formFields": [
+                {
+                    "order": 1,
+                    "name": "source",
+                    "type": "text",
+                    "placeholder": "Enter source",
+                    "dependOn": 0,
+                    "validation": {
+                        "required": true
+                    }
+                },
+                {
+                    "order": 2,
+                    "name": "transformationField",
+                    "type": "jsonEditor",
+                    "placeholder": "Enter transformation query",
+                    "dependOn": 1,
+                    "validation": {
+                        "required": true
+                    }
+                }
+            ]
+        }
+    ]
+}
+
+1 core
+    TransformationEvent (Done)
+    IfConditionEvent (Done)
+    TemperarySaveEvent (Done)
+    LoopEvent (Done)
+
+// When user select core with activity type as TransformationEvent, the below json shape should be generated
+//TransformationEvent
+{
+            "id": "A2",
+            "name": "Transforming the data into certain",
+            "app": "core",
+            "event": "TransformationEvent",
+            "input": {
+                
+            }
+},
+
+// When user select core with activity type as IfConditionEvent, the below json shape should be generated
+//IfConditionEvent
+{
+                        app: "core",
+                        event: "IfConditionEvent",
+                        id: "A12",
+                        input: {
+                          conditions: [
+                           
+                          ],
+                          yesActivity: [
+                         
+                          ],
+                          noActivity: [
+                          
+                          ],
+                        },
+                        name: "Checking nodepool status",
+                }
+
+
+// When user select core with activity type as TemporarySaveEvent, the below json shape should be generated
+//TemporarySaveEvent
+{
+            "id": "A10",
+            "name": "Getting nodepool {{input.nodePoolName}} detail",
+            "app": "core",
+            "event": "TemporarySaveEvent",
+            "input": {
+              
+            }
+}
+
+// When user select core with activity type as LoopEvent, the below json shape should be generated
+//LoopEvent
+    {
+      "id": "A2",
+      "name": "Getting nodepool {{input.nodePoolName}} detail",
+      "app": "core",
+      "event": "LoopEvent",
+      "input": {
+        "items": "{{activity.A1.output}}",
+        "activities": [
+          {
+            "id": "A3",
+            "name": "Checking how many nodePools have atleast 2 nodepool",
+            "app": "core",
+            "event": "FlowControlEvent",
+            "input": {
+              "yesActivity": [
+              
+              ],
+              "conditions": [
+               
+              ]
+            }
+          }
+        ],
+       
+      }
+    },
+
