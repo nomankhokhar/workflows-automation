@@ -1,13 +1,20 @@
-const workflowData = require("./workflow.json"); // Load the workflow data from the JSON file
-
 // Function to delete an activity by parentId from the main array or nested arrays
-const deleteActivity = (parentId, activities) => {
+export const deleteActivity = (parentId, activities) => {
   // Recursive function to find and delete an activity in the main array or nested yesActivity/noActivity arrays
   const findAndDelete = (activities) => {
     for (let i = 0; i < activities.length; i++) {
       // Check if the current activity matches the parentId (main activities array)
       if (activities[i].id === parentId) {
         activities.splice(i, 1); // Remove the activity from the array
+        if (activities.length === 0) {
+          activities.push({
+            id: "A2",
+            name: "Add Activities",
+            app: "start",
+            event: "start",
+            input: {},
+          });
+        }
         return true; // Successfully deleted
       }
 
@@ -51,14 +58,3 @@ const deleteActivity = (parentId, activities) => {
   const isDeleted = findAndDelete(activities);
   return isDeleted ? activities : null; // Return updated activities if deleted, or null if not found
 };
-
-// Example: Deleting an activity with id "A14" from the activities array
-const parentIdToDelete = "A14"; // ID of the activity to delete
-
-// Call deleteActivity to remove the activity from yesActivity/noActivity or the main array
-const updatedActivities = deleteActivity(
-  parentIdToDelete,
-  workflowData.activities
-);
-
-console.log("Deletion Done Updated Activities:", updatedActivities);
