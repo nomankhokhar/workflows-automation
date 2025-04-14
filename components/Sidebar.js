@@ -15,7 +15,7 @@ export function StartWorkFlow() {
     <>
       <Sheet>
         <SheetTrigger>
-          <Button>Start Workflow</Button>
+          <Button className="cursor-pointer">Start Workflow</Button>
         </SheetTrigger>
         <SheetContent>
           <SheetHeader>
