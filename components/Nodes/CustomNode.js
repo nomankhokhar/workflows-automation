@@ -1,7 +1,7 @@
 "use client";
 // components/CustomNode.js
 import React, { useContext } from "react";
-import { Handle, Position, useReactFlow } from "reactflow";
+import { Handle, Position } from "reactflow";
 import NodeForm from "../Forms/NodeForm";
 import {
   Sheet,
@@ -21,6 +21,7 @@ const CustomNode = ({ id, data: nodeData }) => {
 
   const handleDeleteNode = (nodeId) => {
     const newActivities = deleteActivity(nodeId, data.activities);
+    console.log("New Activities after deletion:", newActivities);
     setData((prevData) => ({
       ...prevData,
       activities: newActivities,

@@ -6,15 +6,6 @@ export const deleteActivity = (parentId, activities) => {
       // Check if the current activity matches the parentId (main activities array)
       if (activities[i].id === parentId) {
         activities.splice(i, 1); // Remove the activity from the array
-        if (activities.length === 0) {
-          activities.push({
-            id: "A2",
-            name: "Add Activities",
-            app: "start",
-            event: "start",
-            input: {},
-          });
-        }
         return true; // Successfully deleted
       }
 
@@ -27,6 +18,13 @@ export const deleteActivity = (parentId, activities) => {
           );
           if (yesIndex !== -1) {
             activities[i].input.yesActivity.splice(yesIndex, 1); // Remove the activity from yesActivity
+            activities[i].input.yesActivity.push({
+              id: "A7777",
+              name: "Yes Activities",
+              app: "yesActivity",
+              event: "yesActivity",
+              input: {},
+            });
             return true; // Successfully deleted
           }
         }
@@ -38,6 +36,13 @@ export const deleteActivity = (parentId, activities) => {
           );
           if (noIndex !== -1) {
             activities[i].input.noActivity.splice(noIndex, 1); // Remove the activity from noActivity
+            activities[i].input.noActivity.push({
+              id: "A9999",
+              name: "No Activities",
+              app: "noActivity",
+              event: "noActivity",
+              input: {},
+            });
             return true; // Successfully deleted
           }
         }
@@ -56,5 +61,18 @@ export const deleteActivity = (parentId, activities) => {
 
   // Call the recursive function to modify the activities array
   const isDeleted = findAndDelete(activities);
-  return isDeleted ? activities : null; // Return updated activities if deleted, or null if not found
+  if (isDeleted) {
+    if (activities.length === 0) {
+      activities.push({
+        id: "A0000",
+        name: "Start Activity",
+        app: "start",
+        event: "start",
+        input: {},
+      });
+    }
+    return activities;
+  } else {
+    return activities;
+  }
 };
