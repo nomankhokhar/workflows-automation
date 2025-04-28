@@ -10,7 +10,8 @@ import {
 import { Button } from "../ui/button";
 import NodeForm from "../Forms/NodeForm";
 
-const YesActivity = ({ id }) => {
+const YesActivity = ({ id, type }) => {
+  console.log("YesActivity", type);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   return (

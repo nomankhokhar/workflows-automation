@@ -15,6 +15,7 @@ const CustomEdge = ({
   targetY,
   sourcePosition,
   targetPosition,
+  label,
 }) => {
   const [edgePath, labelX, labelY] = getStraightPath({
     sourceX,
@@ -25,10 +26,7 @@ const CustomEdge = ({
     targetPosition,
   });
 
-  // Delete edge function
-  const handleDeleteEdge = () => {
-    setEdges((eds) => eds.filter((edge) => edge.id !== id));
-  };
+ 
   return (
     <>
       <BaseEdge id={id} path={edgePath} />
@@ -43,14 +41,18 @@ const CustomEdge = ({
             cursor: "pointer",
           }}
         >
-          {/* <div className="shadow-md">
-              <button
-                onClick={handleDeleteEdge}
-                className="bg-red-600 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center hover:bg-red-700 cursor-pointer"
+          <div className="shadow-md">
+              {label == "yesActivity" && <button
+                className="bg-red-600 text-black text-xs w-6 h-6 rounded-full flex items-center justify-center hover:bg-red-700 cursor-pointer"
               >
-                X
-              </button>
-            </div> */}
+                {label == "yesActivity" && "Yes" }
+              </button>}
+              {label == "noActivity" && <button
+                className="bg-red-600 text-black text-xs w-6 h-6 rounded-full flex items-center justify-center hover:bg-red-700 cursor-pointer"
+              >
+                {label == "noActivity" && "No" }
+              </button>}
+            </div>
         </div>
       </EdgeLabelRenderer>
     </>

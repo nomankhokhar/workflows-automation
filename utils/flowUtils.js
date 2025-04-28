@@ -9,7 +9,14 @@ export function flattenWorkflowToFlowElements(workflowJson) {
   const dagreGraph = new dagre.graphlib.Graph();
 
   dagreGraph.setDefaultEdgeLabel(() => ({}));
-  dagreGraph.setGraph({ rankdir: "TB" }); // Top-to-bottom layout
+  dagreGraph.setGraph({
+    rankdir: "TB",    // Top-to-bottom direction
+    nodesep: 50,      // 50px between nodes in the same rank
+    ranksep: 100,     // 100px between rank layers
+    edgesep: 10,      // 10px between edges
+    marginx: 20,      // 20px horizontal margin around graph
+    marginy: 20       // 20px vertical margin around graph
+  });
 
   let yOffset = 0; // Manual vertical positioning
   let xOffset = 0; // Manual horizontal positioning
@@ -49,27 +56,35 @@ export function flattenWorkflowToFlowElements(workflowJson) {
         source: parentId,
         target: id,
         animated: true,
+        label: activity?.event,
         type: "custom-edge",
       });
       dagreGraph.setEdge(parentId, id);
     }
 
     // If the activity has nested activities (like yesActivity, noActivity, or LoopEvent activities), process them
+
     if (activity.input.yesActivity) {
+      let lastId = id;
       activity.input.yesActivity.forEach((yesActivity) => {
-        processActivity(yesActivity, id); // Create edge from parent (current activity) to yesActivity
+        processActivity(yesActivity, lastId);
+        lastId = yesActivity.id;
       });
     }
 
     if (activity.input.noActivity) {
+      let lastId = id;
       activity.input.noActivity.forEach((noActivity) => {
-        processActivity(noActivity, id); // Create edge from parent (current activity) to noActivity
+        processActivity(noActivity, lastId);
+        lastId = noActivity.id;
       });
     }
 
     if (activity.input.activities) {
+      let lastId = id;
       activity.input.activities.forEach((subActivity) => {
-        processActivity(subActivity, id); // Create edge from parent (current activity) to subActivity
+        processActivity(subActivity, lastId);
+        lastId = subActivity.id;
       });
     }
   }

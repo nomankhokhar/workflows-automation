@@ -10,7 +10,8 @@ import {
 import { Button } from "../ui/button";
 import NodeForm from "../Forms/NodeForm";
 
-const NoActivity = ({ id }) => {
+const NoActivity = ({ id,type }) => {
+  console.log("NoActivity", type);
   const [isSheetOpen, setIsSheetOpen] = React.useState(false);
   return (
     <div>

@@ -1,66 +1,84 @@
 // Function to delete an activity by parentId from the main array or nested arrays
 export const deleteActivity = (parentId, activities) => {
-  // Recursive function to find and delete an activity in the main array or nested yesActivity/noActivity arrays
+  // Recursive function to find and delete an activity
   const findAndDelete = (activities) => {
     for (let i = 0; i < activities.length; i++) {
-      // Check if the current activity matches the parentId (main activities array)
-      if (activities[i].id === parentId) {
-        activities.splice(i, 1); // Remove the activity from the array
-        return true; // Successfully deleted
+      const activity = activities[i];
+
+      // Direct match found in this level
+      if (activity.id === parentId) {
+        activities.splice(i, 1); // Remove
+        return true;
       }
 
-      // If the current activity has nested activities (yesActivity or noActivity), recurse into them
-      if (activities[i].input) {
-        if (activities[i].input.yesActivity) {
-          // Look for the parentId in yesActivity array
-          const yesIndex = activities[i].input.yesActivity.findIndex(
-            (activity) => activity.id === parentId
-          );
-          if (yesIndex !== -1) {
-            activities[i].input.yesActivity.splice(yesIndex, 1); // Remove the activity from yesActivity
-            activities[i].input.yesActivity.push({
-              id: "A7777",
-              name: "Yes Activities",
-              app: "yesActivity",
-              event: "yesActivity",
-              input: {},
-            });
-            return true; // Successfully deleted
+      if (activity.input) {
+        // Check yesActivity
+        if (activity.input.yesActivity && activity.input.yesActivity.length > 0) {
+          let lastId = null;
+          for (let j = 0; j < activity.input.yesActivity.length; j++) {
+            if (activity.input.yesActivity[j].id === parentId) {
+              activity.input.yesActivity.splice(j, 1);
+              if (activity.input.yesActivity.length === 0) {
+                activity.input.yesActivity.push({
+                  id: "A7777",
+                  name: "Yes Activities",
+                  app: "yesActivity",
+                  event: "yesActivity",
+                  input: {},
+                });
+              }
+              return true;
+            }
+            lastId = activity.input.yesActivity[j].id;
+            // Deep nested check
+            const result = findAndDelete([activity.input.yesActivity[j]]);
+            if (result) return true;
           }
         }
 
-        if (activities[i].input.noActivity) {
-          // Look for the parentId in noActivity array
-          const noIndex = activities[i].input.noActivity.findIndex(
-            (activity) => activity.id === parentId
-          );
-          if (noIndex !== -1) {
-            activities[i].input.noActivity.splice(noIndex, 1); // Remove the activity from noActivity
-            activities[i].input.noActivity.push({
-              id: "A9999",
-              name: "No Activities",
-              app: "noActivity",
-              event: "noActivity",
-              input: {},
-            });
-            return true; // Successfully deleted
+        // Check noActivity
+        if (activity.input.noActivity && activity.input.noActivity.length > 0) {
+          let lastId = null;
+          for (let j = 0; j < activity.input.noActivity.length; j++) {
+            if (activity.input.noActivity[j].id === parentId) {
+              activity.input.noActivity.splice(j, 1);
+              if (activity.input.noActivity.length === 0) {
+                activity.input.noActivity.push({
+                  id: "A9999",
+                  name: "No Activities",
+                  app: "noActivity",
+                  event: "noActivity",
+                  input: {},
+                });
+              }
+              return true;
+            }
+            lastId = activity.input.noActivity[j].id;
+            const result = findAndDelete([activity.input.noActivity[j]]);
+            if (result) return true;
           }
         }
 
-        // If there are other nested activities, recurse further
-        if (activities[i].input.activities) {
-          const result = findAndDelete(activities[i].input.activities);
-          if (result) {
-            return true; // Successfully deleted in nested activities
+        // Check generic activities
+        if (activity.input.activities && activity.input.activities.length > 0) {
+          for (let j = 0; j < activity.input.activities.length; j++) {
+            if (activity.input.activities[j].id === parentId) {
+              activity.input.activities.splice(j, 1);
+              return true;
+            }
+            const result = findAndDelete([activity.input.activities[j]]);
+            if (result) return true;
           }
         }
       }
     }
-    return false; // Activity not found
+    return false;
   };
 
-  // Call the recursive function to modify the activities array
+  // Kick off the recursive search
   const isDeleted = findAndDelete(activities);
+
+  // If all root activities are deleted, inject a dummy starter
   if (isDeleted) {
     if (activities.length === 0) {
       activities.push({
